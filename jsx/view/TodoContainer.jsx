@@ -2,6 +2,7 @@
 
 import React from 'react';
 import TodoItem from './TodoItem';
+import TodoInputBox from './TodoInputBox';
 import Todo from '../model/Todo';
 
 class TodoContainer extends React.Component {
@@ -9,7 +10,7 @@ class TodoContainer extends React.Component {
     constructor(props) {
         var todos = [];
         var i, n;
-        for (i = 0, n = 10; i < n; i++) {
+        for (i = 0, n = 3; i < n; i++) {
             todos.push(new Todo(`title-${i}`));
         }
 
@@ -37,6 +38,12 @@ class TodoContainer extends React.Component {
         this.setState({todos: todos});
     }
 
+    onCreate (title) {
+        this.state.todos.push( new Todo(title) );
+
+        this.setState({todos: this.state.todos});
+    }
+
     render() {
         var todoItems = this.state.todos.map((todo) => {
             return <TodoItem todo={todo}
@@ -47,6 +54,7 @@ class TodoContainer extends React.Component {
 
         return (
             <div>
+                <TodoInputBox onCreate={this.onCreate.bind(this)}/>
                 <p>Todo一覧</p>
                 {todoItems}
             </div>
