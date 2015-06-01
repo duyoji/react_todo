@@ -29,11 +29,20 @@ class TodoContainer extends React.Component {
         this.setState({todos: todos});
     }
 
+    onDelete (todoId) {
+        var todos = this.state.todos.filter((todo) => {
+            return todoId !== todo.id;
+        });
+
+        this.setState({todos: todos});
+    }
+
     render() {
         var todoItems = this.state.todos.map((todo) => {
             return <TodoItem todo={todo}
                     key={todo.id}
-                    onChangeStatus={this.onChangeStatus.bind(this)} />;
+                    onChangeStatus={this.onChangeStatus.bind(this)}
+                    onDelete={this.onDelete.bind(this)} />;
         });
 
         return (
