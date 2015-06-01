@@ -1,3 +1,5 @@
+'use strict';
+
 import React from 'react';
 import TodoItem from './TodoItem';
 import Todo from '../model/Todo';
@@ -12,16 +14,26 @@ class TodoContainer extends React.Component {
         }
 
         super(props);
-        this.state = {todos:todos};
+        this.state = {todos: todos};
     }
 
-    onChangeStatus (event) {
-        console.log('TodoContainer#onChangeStatus');
+    onChangeStatus (todoId) {
+        var todos = this.state.todos.map((todo) => {
+            if (todo.id === todoId) {
+                todo.toggleStatus();
+            }
+
+            return todo;
+        });
+
+        this.setState({todos: todos});
     }
 
     render() {
         var todoItems = this.state.todos.map((todo) => {
-            return <TodoItem todo={todo} onChangeStatus={this.onChangeStatus}/>
+            return <TodoItem todo={todo}
+                    key={todo.id}
+                    onChangeStatus={this.onChangeStatus.bind(this)} />;
         });
 
         return (
