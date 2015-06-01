@@ -15,12 +15,14 @@ class TodoContainer extends React.Component {
         this.state = {todos:todos};
     }
 
+    onChangeStatus (event) {
+        console.log('TodoContainer#onChangeStatus');
+    }
+
     render() {
         var todoItems = this.state.todos.map((todo) => {
-            return <TodoItem todo={todo} />
+            return <TodoItem todo={todo} onChangeStatus={this.onChangeStatus}/>
         });
-
-        console.log(todoItems, this.state);
 
         return (
             <div>
