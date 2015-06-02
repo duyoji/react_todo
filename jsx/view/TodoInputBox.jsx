@@ -4,24 +4,42 @@ import React from 'react';
 
 class TodoInputBox extends React.Component {
 
-    constructor(props) {
+    constructor (props) {
         super(props);
+        this.state = {title: ''};
     }
 
-    onCreate () {
-        this.props.onCreate('abc');
+    onCreate (title) {
+        this.props.onCreate(title);
+        this.setState({title: ''});
+    }
+
+    onChange (event) {
+        console.log('onChange');
+        this.setState({title: event.target.value});
+    }
+
+    onKeyDown (event) {
+        console.log('onKeyDown');
+        var enterKeyCode = 13;
+        var value = event.target.value;
+        if (value && enterKeyCode === event.keyCode) {
+            this.onCreate(value);
+        }
     }
 
     render() {
-
         return (
             <p>
                 <input type="text"
-                    onInput={this.onCreate.bind(this)} />
+                    onChange={this.onChange.bind(this)}
+                    onKeyDown={this.onKeyDown.bind(this)}
+                    value={this.state.title}/>
             </p>
         );
     }
 }
+
 TodoInputBox.propTypes = {
     onCreate: React.PropTypes.func.isRequired
 };
