@@ -38,6 +38,14 @@ class TodoContainer extends React.Component {
         this.setState({todos: todos});
     }
 
+    onDeleteAllWithDone () {
+        var todos = this.state.todos.filter((todo) => {
+            return !todo.done;
+        });
+
+        this.setState({todos: todos});
+    }
+
     onCreate (title) {
         this.state.todos.push( new Todo(title) );
 
@@ -51,10 +59,16 @@ class TodoContainer extends React.Component {
                     onChangeStatus={this.onChangeStatus.bind(this)}
                     onDelete={this.onDelete.bind(this)} />;
         });
+        var isEnableDeleteAll = this.state.todos.some((todo) => {
+            return todo.done;
+        });
 
         return (
             <div>
-                <TodoInputBox onCreate={this.onCreate.bind(this)}/>
+                <TodoInputBox
+                    isEnableDeleteAll={isEnableDeleteAll}
+                    onCreate={this.onCreate.bind(this)}
+                    onDeleteAllWithDone={this.onDeleteAllWithDone.bind(this)}/>
                 <p>Todo一覧</p>
                 {todoItems}
             </div>
