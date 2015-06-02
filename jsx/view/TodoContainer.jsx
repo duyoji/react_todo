@@ -9,20 +9,23 @@ import Todo from '../model/Todo';
 class TodoContainer extends React.Component {
 
     constructor(props) {
-        var todos = [];
-        var i, n;
-        for (i = 0, n = 3; i < n; i++) {
-            todos.push(new Todo(`title-${i}`));
-        }
-
         super(props);
-        this.state = {todos: todos};
+        this.state = {todos: Todo.fetch()};
+    }
+
+    onCreate (title) {
+        var todo = new Todo(title);
+        todo.save();
+
+        this.state.todos.push( todo );
+        this.setState({todos: this.state.todos});
     }
 
     onChangeStatus (todoId) {
         var todos = this.state.todos.map((todo) => {
             if (todo.id === todoId) {
                 todo.toggleStatus();
+                todo.save();
             }
 
             return todo;
@@ -33,31 +36,35 @@ class TodoContainer extends React.Component {
 
     onDelete (todoId) {
         if ( !confirm('Are you sure?') ) {
-            return
+            return;
         }
 
         var todos = this.state.todos.filter((todo) => {
-            return todoId !== todo.id;
+            if (todoId === todo.id) {
+                todo.remove();
+                return false;
+            } else {
+                return true;
+            }
         });
         this.setState({todos: todos});
     }
 
     onDeleteAllWithDone () {
         if ( !confirm('Are you sure?') ) {
-            return
+            return;
         }
 
         var todos = this.state.todos.filter((todo) => {
-            return !todo.done;
+            if (todo.done) {
+                todo.remove();
+                return false;
+            } else {
+                return true;
+            }
         });
 
         this.setState({todos: todos});
-    }
-
-    onCreate (title) {
-        this.state.todos.push( new Todo(title) );
-
-        this.setState({todos: this.state.todos});
     }
 
     render() {
