@@ -3,6 +3,7 @@
 import React from 'react';
 import TodoItem from './TodoItem';
 import TodoInputBox from './TodoInputBox';
+import Button from './Button';
 import Todo from '../model/Todo';
 
 class TodoContainer extends React.Component {
@@ -31,14 +32,21 @@ class TodoContainer extends React.Component {
     }
 
     onDelete (todoId) {
+        if ( !confirm('Are you sure?') ) {
+            return
+        }
+
         var todos = this.state.todos.filter((todo) => {
             return todoId !== todo.id;
         });
-
         this.setState({todos: todos});
     }
 
     onDeleteAllWithDone () {
+        if ( !confirm('Are you sure?') ) {
+            return
+        }
+
         var todos = this.state.todos.filter((todo) => {
             return !todo.done;
         });
@@ -59,16 +67,17 @@ class TodoContainer extends React.Component {
                     onChangeStatus={this.onChangeStatus.bind(this)}
                     onDelete={this.onDelete.bind(this)} />;
         });
-        var isEnableDeleteAll = this.state.todos.some((todo) => {
+        var hasDoneSomeTodo = this.state.todos.some((todo) => {
             return todo.done;
         });
 
         return (
             <div>
-                <TodoInputBox
-                    isEnableDeleteAll={isEnableDeleteAll}
-                    onCreate={this.onCreate.bind(this)}
-                    onDeleteAllWithDone={this.onDeleteAllWithDone.bind(this)}/>
+                <TodoInputBox onCreate={this.onCreate.bind(this)} />
+                <Button
+                    title="完了済み削除ボタン"
+                    enable={hasDoneSomeTodo}
+                    onClick={this.onDeleteAllWithDone.bind(this)} />
                 <p>Todo一覧</p>
                 {todoItems}
             </div>

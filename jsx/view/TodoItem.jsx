@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import Button from './Button';
 import Todo from '../model/Todo';
 
 class TodoItem extends React.Component {
@@ -14,14 +15,12 @@ class TodoItem extends React.Component {
     }
 
     onDelete () {
-        if (confirm('Are you sure?')) {
-            this.props.onDelete(this.props.todo.id);
-        }
+        this.props.onDelete(this.props.todo.id);
     }
 
     render() {
         var hasDone = this.props.todo.done;
-        var doneText = hasDone ? 'done' : 'not done';
+        var doneText = hasDone ? '完了済み' : '未完了';
 
         return (
             <p>
@@ -30,9 +29,11 @@ class TodoItem extends React.Component {
                     checked={hasDone} />
                     {this.renderTitle()} | {doneText}
                 |
-                <input type="button"
-                    onClick={this.onDelete.bind(this)}
-                    value="delete" />
+                <Button
+                    title="削除"
+                    enable={true}
+                    onClick={this.onDelete.bind(this)} />
+
             </p>
         );
     }
